@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Crop Recommender {% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- Yo line le Bootstrap 5.3.8 ko CSS file lai include garcha. Bootstrap ek popular CSS framework ho, jasle responsive
+    design banaunda madat garcha. Yo link tag le Bootstrap ko CSS styles haru lai enable garcha, jasle garda Bootstrap
+    components haru (jasto ki buttons, forms, navbars, etc.) sahi tarikale dekhauna sakun.-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Yo line le Font Awesome 7.0.1 ko CSS file lai include garcha. Font Awesome ek popular icon library ho, jasle web projects ma icons haru use garna madat garcha. Yo link tag le Font Awesome ko CSS styles haru lai enable garcha, jasle garda Font Awesome icons haru sahi tarikale dekhauna sakun. -->
+     <link rel="stylesheet" href="/static/css/style.css">
+     <!-- Yo line le Django ko static files system ko use garcha. Yo link tag le 'css/style.css' file lai include garcha, jasle garda custom CSS styles haru sahi tarikale dekhauna sakun. Django ko static files system le web projects ma static files (jasto ki CSS, JavaScript, images, etc.) manage garna madat garcha. -->
+</head>
+<body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+            <!-- Yo code block le Bootstrap ko navbar component ko example ho. Navbar ek responsive navigation bar ho, jasle website ko header ma navigation links haru display garcha. Yo code block le ek basic navbar create garcha, jasle mobile devices ma collapse hunchan ra toggle button le expand hunchan. yo code chai "bootstrap 5 navbar haney aauxa google ma" -->
+
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#"><i class="fas fa-apple-alt"></i> Crop Recommender</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <!-- When screen size becomes small, menu items are hidden and shown using a hamburger button. This button has the class navbar-toggler and data attributes to control the collapse behavior of the menu. The span inside the button creates the hamburger icon using the navbar-toggler-icon class. -->
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto ">
+
+                        {% if user.is_authenticated  and not user.is_staff %}
+                        <!--Yo if condition ley k garxa vanda naya user ley login gareyko haina ni already login gareyko user ko interface dekhauni kam garxa-->
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'predict' %}"><i class="fa-solid fa-flask"></i>
+                                Predict</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'user_history' %}"><i
+                                    class="fa-solid fa-clock-rotate-left"></i> History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-user"></i>
+                                Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-key"></i>
+                                Change Password </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'logout' %}"><i
+                                    class="fa-solid fa-sign-out-alt"></i> Logout </a>
+                        </li>
+
+
+                        {% elif user.is_authenticated and user.is_staff %}
+                        <!--Yo elif condition ley k garxa vanda user ley login garda haina ki admin athawa moderator ko id login hudako interface dekhauni kam garxa-->
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-home"></i>
+                                Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i
+                                    class="fa-solid fa-right-to-bracket"></i> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i
+                                    class="fa-solid fa-user-plus"></i> Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i
+                                    class="fa-solid fa-user-shield"></i> Admin</a>
+                        </li>
+
+
+                        {% else %}
+                        <!--Yo else condition ley k garxa tw vanda suruma initially for the first time kosailey website kholda kheri ko interface dekhauni kam garxa, matlab aileysamma user login nagaryeko case-->
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="fa-solid fa-home"></i>
+                                Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}"><i
+                                    class="fa-solid fa-right-to-bracket"></i> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'signup' %}"><i
+                                    class="fa-solid fa-user-plus"></i> Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i
+                                    class="fa-solid fa-user-shield"></i> Admin</a>
+                        </li>
+
+                        {% endif %}
+                        <!-- yo the aba end condition vaehalyo which denotes that if elif else condition ends -->
+
+
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <main class="container py-4">
+            {% block content %} {% endblock %}
+        </main>
+
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+        <!-- Yo link chai "" bootstrap cdn 5 hanesi aauxa""
+        Yo line le Bootstrap 5.3.8 ko JavaScript file lai include garcha. Bootstrap ek popular CSS framework ho, jasle
+        responsive design banaunda madat garcha. Yo script tag le Bootstrap ko JavaScript functionalities haru lai
+        enable garcha, jasle garda Bootstrap components haru (jasto ki modals, dropdowns, carousels, etc.) sahi tarikale
+        kaam garna sakun. -->
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Yo line le SweetAlert 2.1.2 ko JavaScript file lai include garcha. SweetAlert ek popular JavaScript library ho, jasle beautiful alert messages haru create garna madat garcha. Yo script tag le SweetAlert ko functionalities haru lai enable garcha, jasle garda custom alert dialogs haru sahi tarikale dekhauna sakun. -->
+
+<!--To display the messages we use javascript here below;-->
+        {% if messages %}
+        <script>
+            {% for m in messages %}
+            Swal.fire({
+                icon:"{{m.tags | default:'info'}}",
+                 title:"{{m}}"
+                });
+            {% endfor %}
+        </script>
+        {% endif %}
+</body>
+
+</html>
