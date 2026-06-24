@@ -10,5 +10,6 @@ urlpatterns = [
     path('login/',login_view, name='login'),
     path('user_history/',user_history_view, name='user_history'),
     path('history_delete/<int:id>/',user_delete_prediction, name='user_delete_prediction'),
+     path('profile/',profile_view, name='profile'),
     
 ]

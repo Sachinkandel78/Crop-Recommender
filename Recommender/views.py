@@ -117,3 +117,8 @@ def user_delete_prediction(request,id):
     prediction.delete()
     messages.success(request,"Entry Removed from history")
     return redirect("user_history")
+
+@login_required
+def profile_view(request):
+    predictions = Prediction.objects.filter(user=request.user)   
+    return render(request, "profile.html",locals())
