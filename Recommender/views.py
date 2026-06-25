@@ -29,7 +29,7 @@ def signup_view(request):
             messages.error(request, "Password must contain 8 characters")
             return redirect("signup")
 
-        if User.objects.filter(username=email):
+        if User.objects.filter(username=email).exists():
             messages.error(request, "Account already exist with same email id")
             return redirect("signup")
         user = User.objects.create_user(username=email,password=password)
@@ -37,7 +37,7 @@ def signup_view(request):
         if " " in name:
             first, last = name.split(" ",1)  #1-> represent name lai ekchoti split gariyo. manam lokesh kannaur Rahul thyo vaney lokesh kannaurRahul jastai vayo kya hai.
         else:
-            first, last = name, " "
+            first, last = name, ""
         user.first_name, user.last_name = first, last
         user.save()
 #user=email,password save gariyo.Ani tala UserProfile model jun models.py ma xa tesma lagera add gariyo
@@ -128,8 +128,8 @@ def profile_view(request):
         if name:
             parts = name.split(" ",1)
             request.user.first_name = parts[0]
-            request.user.last_name = parts[1] if len(parts) > 1 else " "
-            profile.phone = phone 
+            request.user.last_name = parts[1] if len(parts) > 1 else ""
+            profile.Phone = phone 
             request.user.save()  # request.user means UserProfile model vitrako user
             profile.save()    #Profile variable vitra pailai ko purano name rw phone number ko data leyko thiyem aba vaney user ley change gareyko naya data lagera save gardiyem
             messages.success(request,"Profile updated.")
