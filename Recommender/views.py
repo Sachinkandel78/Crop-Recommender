@@ -35,7 +35,7 @@ def signup_view(request):
         user = User.objects.create_user(username=email,password=password)
         #To insert data in user model
         if " " in name:
-            first, last = name.split(" ",1)
+            first, last = name.split(" ",1)  #1-> represent name lai ekchoti split gariyo. manam lokesh kannaur Rahul thyo vaney lokesh kannaurRahul jastai vayo kya hai.
         else:
             first, last = name, " "
         user.first_name, user.last_name = first, last
@@ -89,7 +89,7 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST.get("email")
         password = request.POST.get("password")
-        #Receive data from user using post method . POST — when a user sends/submits data to the server.POST — when a user sends/submits data to the server.
+        #Receive data from user using post method . POST — when a user sends/submits data to the server.
         #GET = when the user requests/receives data from the server — no data is being sent.
 
         user = authenticate(request, username=username, password=password)
@@ -120,5 +120,20 @@ def user_delete_prediction(request,id):
 
 @login_required
 def profile_view(request):
-    predictions = Prediction.objects.filter(user=request.user)   
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == "POST":  #Naya name rw number liyiyo matlab purano user ley afno name rw number change hanyo tyo data post method ko through get gariyo name rw phone variables ma 
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        # yo "phone","name" kata bata aayeko vanda profile.html page vitrako full name rw phone number section ko name="name" rw name="phone" bata aayeko ho
+        if name:
+            parts = name.split(" ",1)
+            request.user.first_name = parts[0]
+            request.user.last_name = parts[1] if len(parts) > 1 else " "
+            profile.phone = phone 
+            request.user.save()  # request.user means UserProfile model vitrako user
+            profile.save()    #Profile variable vitra pailai ko purano name rw phone number ko data leyko thiyem aba vaney user ley change gareyko naya data lagera save gardiyem
+            messages.success(request,"Profile updated.")
+    full_name = request.user.get_full_name()
     return render(request, "profile.html",locals())
+
+
